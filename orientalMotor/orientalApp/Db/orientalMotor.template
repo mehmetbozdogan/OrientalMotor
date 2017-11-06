@@ -1,0 +1,194 @@
+# orientalMotor.db
+# Template database for the Oriental Motor ARD-CD Controller
+# Mehmet Bozdogan 04/11/2017
+#
+# substitutions:
+# sys    - system
+# sec    - section
+# dev    - device
+# $(sys)-$(sec)-$(dev) - device port
+#
+# If "$(sys)-$(sec)-$(dev):POSITION" is set to 0 motor moves to $(sys)-$(sec)-$(dev):OFFPOSITION
+# If "$(sys)-$(sec)-$(dev):POSITION" is set to 1 motor moves to $(sys)-$(sec)-$(dev):ONPOSITION
+# $(sys)-$(sec)-$(dev):STATUS for monitoring POSITION state(OFF, ON or Between)
+#
+################################################################################
+record(bo, "$(sys)-$(sec)-$(dev):MODE")
+{
+	field(DESC, "$(dev) Motion Mode Selection")
+	field(DTYP, "stream")
+	field(OUT,  "@orientalMotor.proto modeSet($(id)) $(sys)-$(sec)-$(dev)")
+	field(SCAN, "Passive")
+	field(ZNAM, "Incremental")
+	field(ONAM, "Absolute")
+}
+record(ao, "$(sys)-$(sec)-$(dev):FREQ")
+{
+	field(DESC, "$(dev) Frequency Set")
+	field(DTYP, "stream")
+	field(OUT,  "@orientalMotor.proto freqSet($(id)) $(sys)-$(sec)-$(dev)")
+	field(SCAN, "Passive")
+	field(HOPR, "1000000")
+	field(LOPR, "0")
+	field(DRVH, "1000000")
+	field(DRVL, "0")
+	field(EGU, "Hz")
+	field(PREC, "0")
+}
+record(ao, "$(sys)-$(sec)-$(dev):ACCELERATION")
+{
+	field(DESC, "$(dev) acceleration")
+	field(DTYP, "stream")
+	field(OUT,  "@orientalMotor.proto accelerationSet($(id)) $(sys)-$(sec)-$(dev)")
+	field(SCAN, "Passive")
+	field(HOPR, "1000000")
+	field(LOPR, "1")
+	field(DRVH, "1000000")
+	field(DRVL, "1")
+	field(EGU, "us/kHz")
+	field(PREC, "0")
+}
+record(ao, "$(sys)-$(sec)-$(dev):DECELERATION")
+{
+	field(DESC, "$(dev) deceleration")
+	field(DTYP, "stream")
+	field(OUT,  "@orientalMotor.proto decelerationSet($(id)) $(sys)-$(sec)-$(dev)")
+	field(SCAN, "Passive")
+	field(HOPR, "1000000")
+	field(LOPR, "1")
+	field(DRVH, "1000000")
+	field(DRVL, "1")
+	field(EGU, "us/kHz")
+	field(PREC, "0")
+}
+record(ao, "$(sys)-$(sec)-$(dev):MOVE")
+{
+	field(DESC, "incremental move")
+	field(DTYP, "stream")
+	field(OUT,  "@orientalMotor.proto move($(id)) $(sys)-$(sec)-$(dev)")
+	field(SCAN, "Passive")
+	field(HOPR, "8388607")
+	field(LOPR, "-8388607")
+	field(DRVH, "8388607")
+	field(DRVL, "-8388607")
+	field(EGU, "Step")
+	field(PREC, "0")
+}
+record(longin, "$(sys)-$(sec)-$(dev):POSITION-RB")
+{
+	field(DESC, "$(dev) current position")
+	field(DTYP, "stream")
+	field(INP,  "@orientalMotor.proto getCurrentPosition($(id)) $(sys)-$(sec)-$(dev)")
+	field(SCAN, "1 second")
+	field(HOPR, "8388607")
+	field(LOPR, "-8388607")
+	field(EGU, "Step")
+	field(FLNK, "$(sys)-$(sec)-$(dev):STATUS")
+}
+record(longin, "$(sys)-$(sec)-$(dev):SPEED-RB")
+{
+	field(DESC, "$(dev) current speed")
+	field(DTYP, "stream")
+	field(INP,  "@orientalMotor.proto getCurrentSpeed($(id)) $(sys)-$(sec)-$(dev)")
+	field(SCAN, "1 second")
+	field(EGU, "r/min")
+	field(FLNK, "$(sys)-$(sec)-$(dev):STATUS")
+}
+record(bo, "$(sys)-$(sec)-$(dev):POSITION-RESET")
+{
+	field(DESC, "$(dev) current position")
+	field(DTYP, "stream")
+	field(OUT,  "@orientalMotor.proto resetCurrentPosition($(id)) $(sys)-$(sec)-$(dev)")
+	field(SCAN, "Passive")
+}
+record(bo, "$(sys)-$(sec)-$(dev):ALARM-RESET")
+{
+	field(DESC, "$(dev) reset alarm")
+	field(DTYP, "stream")
+	field(OUT,  "@orientalMotor.proto alarmReset($(id)) $(sys)-$(sec)-$(dev)")
+	field(SCAN, "Passive")
+}
+record(bo, "$(sys)-$(sec)-$(dev):POSALARM-RESET")
+{
+	field(DESC, "$(dev) reset alarm")
+	field(DTYP, "stream")
+	field(OUT,  "@orientalMotor.proto posAlarmReset($(id)) $(sys)-$(sec)-$(dev)")
+	field(SCAN, "Passive")
+}
+record(mbbi, "$(sys)-$(sec)-$(dev):ALARM-STATUS")
+{
+	field(DESC, "$(dev) alarm status")
+	field(DTYP, "stream")
+	field(INP,  "@orientalMotor.proto alarmStatus($(id)) $(sys)-$(sec)-$(dev)")
+	field(SCAN, "5 second")
+}
+record(mbbi, "$(sys)-$(sec)-$(dev):WARNING-STATUS")
+{
+	field(DESC, "$(dev) warning status")
+	field(DTYP, "stream")
+	field(INP,  "@orientalMotor.proto warningStatus($(id)) $(sys)-$(sec)-$(dev)")
+	field(SCAN, "5 second")
+}
+record(mbbi, "$(sys)-$(sec)-$(dev):COMMERR-STATUS")
+{
+	field(DESC, "$(dev) communication error status")
+	field(DTYP, "stream")
+	field(INP,  "@orientalMotor.proto commErrStatus($(id)) $(sys)-$(sec)-$(dev)")
+	field(SCAN, "5 second")
+}
+record(ao, "$(sys)-$(sec)-$(dev):ONPOSITION")
+{
+	field(DESC, "$(dev) on position")
+	field(DTYP, "Raw Soft Channel")
+	field(SCAN, "Passive")
+	field(HOPR, "8388607")
+	field(LOPR, "-8388607")
+	field(DRVH, "8388607")
+	field(DRVL, "-8388607")
+	field(VAL, "10000")
+	field(EGU, "Step")
+	field(PREC, "0")
+}
+record(ao, "$(sys)-$(sec)-$(dev):OFFPOSITION")
+{
+	field(DESC, "$(dev) off position")
+	field(DTYP, "Raw Soft Channel")
+	field(SCAN, "Passive")
+	field(HOPR, "8388607")
+	field(LOPR, "-8388607")
+	field(DRVH, "8388607")
+	field(DRVL, "-8388607")
+	field(VAL, "15000")
+	field(EGU, "Step")
+	field(PREC, "0")
+}
+record(calcout, "$(sys)-$(sec)-$(dev):POSITIONCALC")
+{
+	field(DESC, "$(dev) Position calculate")
+	field(DTYP, "stream")
+	field(INPA, "$(sys)-$(sec)-$(dev):ONPOSITION")
+	field(INPB, "$(sys)-$(sec)-$(dev):OFFPOSITION")
+	field(INPC, "$(sys)-$(sec)-$(dev):POSITION")
+	field(CALC, "C=1?A:(C=0?B:0)")
+	field(OUT,  "@orientalMotor.proto goto($(id)) $(sys)-$(sec)-$(dev)")
+	field(SCAN, "Passive")
+	field(PREC, "0")
+}
+record(calc, "$(sys)-$(sec)-$(dev):STATUS")
+{
+	field(DESC, "$(dev) Position status")
+	field(INPA, "$(sys)-$(sec)-$(dev):ONPOSITION")
+	field(INPB, "$(sys)-$(sec)-$(dev):OFFPOSITION")
+	field(INPC, "$(sys)-$(sec)-$(dev):POSITION-RB")
+	field(CALC, "C=A?1:(C=B?0:2)")
+	field(SCAN, "Passive")
+	field(PREC, "0")
+}
+record(bo, "$(sys)-$(sec)-$(dev):POSITION")
+{
+	field(DESC, "$(dev) position setpoint")
+	field(DTYP, "Raw Soft Channel")
+	field(OUT, "$(sys)-$(sec)-$(dev):POSITIONCALC PP")
+	field(ZNAM, "Off")
+	field(ONAM, "On")
+}

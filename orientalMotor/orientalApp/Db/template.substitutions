@@ -1,0 +1,17 @@
+# template.substitutions
+# subs. file for Oriental Motor
+# Mehmet Bozdogan 04/11/2017
+#
+# substitutions:
+# sys    - system
+# sec    - section
+# dev    - device
+# $(sys)-$(sec)-$(dev) - device port(devPort)
+# id	 - controller id
+#
+#
+################################################################################
+file db/orientalMotor.template {
+    pattern { sys, sec, dev, id }
+        { "SYS", "SEC", "ORIENTAL", "0x01"}
+}

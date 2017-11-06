@@ -1,0 +1,50 @@
+<!--?xml version="1.0" encoding="iso-8859-1"?-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-2">
+  <title>Oriental Motor Controller Support</title>
+</head>
+
+<body>
+<h1>Installation and Building</h1>
+It must be built for use at your site.
+<ol>
+  <li>Copy <tt>orientalMotorIOC</tt> folder to your home directory <br></li>
+  <li>Edit the <tt>configure/RELEASE.local</tt> file and set the paths to your
+    installation of EPICS base, EPICSv4, ASYN support modules .</li>
+  <li>Build StreamDevice (or add your streamdevice support module location to <tt>configure/RELEASE.local</tt> file):<br>
+    <tt>cd orientalMotorIOC/StreamDevice</tt><br>
+    <tt>make</tt><br>
+  </li>
+  
+  <li>Execute <tt>make</tt> in the top level directory.</li></ol>
+<p><br>
+</p>
+
+<h1>ARD-CD Controller Hardware Configuration</h1>
+<ol>
+  <li>Set termination resistor setting switches <tt>(TERM. No1 and No2)</tt> ON <br></li>
+  <li>Set SW4 Switch 1<tt>(Set Address Number)</tt> to Off, SW4 Switch 2<tt>(Set The Protocol)</tt> to On<tt>(Modbus) </li>
+  <li>Set SW2(Transmission rate setting switch) to 0<tt>(9600 Baudrate)</tt><br> </li>
+    <tt>0 - 9600</tt><br>
+    <tt>1 - 19200</tt><br>
+    <tt>2 - 38400</tt><br>
+    <tt>3 - 57600</tt><br>
+    <tt>4 - 115200</tt><br>
+  <li>Set Adress number setting switch <tt>(ID)</tt> to 1</li>
+    <tt>Change id in subs. file</tt><br>
+    <tt>* OrientalMotor/orientalMotorIOC/orientalApp/template.substitutions</tt><br>
+    <tt>file db/orientalMotor.db {</tt><br>
+    <tt>&ensp;&ensp;&ensp;&ensp;pattern { sys, sec, dev, id }</tt><br>
+    <tt>&ensp;&ensp;&ensp;&ensp;{ "BL", "C001", "ORIENTAL", "0x01"}</tt> # ID = 0x01<br>
+    <tt>}</tt><br>
+
+</ol>
+<p><br>
+</p>
+<b>Note : </b><br>
+If "$(sys)-$(sec)-$(dev):POSITION" is set to 0, motor moves to $(sys)-$(sec)-$(dev):OFFPOSITION <br>
+If "$(sys)-$(sec)-$(dev):POSITION" is set to 1, motor moves to $(sys)-$(sec)-$(dev):ONPOSITION <br>
+$(sys)-$(sec)-$(dev):STATUS for monitoring POSITION state(OFF, ON or Between)<br>
+
+</body></html>

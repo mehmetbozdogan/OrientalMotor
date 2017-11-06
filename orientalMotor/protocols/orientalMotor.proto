@@ -1,0 +1,99 @@
+# orientalMotor.proto
+# Proto file for the Oriental Motor ARD-CD Controller
+# Mehmet Bozdogan 04/11/2017
+#
+################################################################################
+ReadTimeout = 200;
+WriteTimeout = 100;
+PollPeriod = 100;
+ReplyTimeout = 1000;
+LockTimeout = 5000;
+ExtraInput = Ignore;
+
+modeSet {
+	out $1 "\x06\x05\x01\x00%.1r%#<modbus>";
+	in $1 "\x06\x05\x01\x00%01r%#<modbus>";
+	@init{
+	out $1 "\x03\x05\x01\x00\x01%#<modbus>";
+	in $1 "\x03\x02%02r%#<modbus>";
+	}
+# 0 : Incremental	1 : Absolute
+}
+freqSet {
+	out $1 "\x10\x04\x80\x00\x02\x04%.4r%#<modbus>";
+	in $1 "\x10\x04\x80\x00\x02%#<modbus>";
+	@init{
+	out $1 "\x03\x04\x80\x00\x02%#<modbus>";
+	in $1 "\x03\x04%04r%#<modbus>";
+	}
+}
+accelerationSet {
+	out $1 "\x10\x06\x00\x00\x02\x04%.4r%#<modbus>";
+	in $1 "\x10\x06\x00\x00\x02%#<modbus>";
+	@init{
+	out $1 "\x03\x06\x00\x00\x02%#<modbus>";
+	in $1 "\x03\x04%04r%#<modbus>";
+	}
+}
+decelerationSet{
+	out $1 "\x10\x06\x80\x00\x02\x04%.4r%#<modbus>";
+	in $1 "\x10\x06\x80\x00\x02%#<modbus>";
+	@init{
+	out $1 "\x03\x06\x80\x00\x02%#<modbus>";
+	in $1 "\x03\x04%04r%#<modbus>";
+	}
+}
+move {
+	out $1 "\x10\x04\x00\x00\x02\x04%.4r%#<modbus>";
+	in $1 "\x10\x04\x00\x00\x02%#<modbus>";
+	out $1 "\x06\x00\x7D\x00\x08%#<modbus>";
+	in $1 "\x06\x00\x7D\x00\x08%#<modbus>";
+	out $1 "\x06\x00\x7D\x00\x00%#<modbus>";
+	in $1 "\x06\x00\x7D\x00\x00%#<modbus>";
+}
+getCurrentPosition {
+	out $1 "\x03\x00\xCC\x00\x02%#<modbus>";
+	in $1 "\x03\x04%4r%#<modbus>";
+}
+getCurrentSpeed {
+	out $1 "\x03\x00\xCE\x00\x02%#<modbus>";
+	in $1 "\x03\x04%4r%#<modbus>";
+}
+resetCurrentPosition {
+	out $1 "\x10\x01\x8A\x00\x02\x04\x00\x00\x00\x00%#<modbus>";
+	in $1 "\x10\x01\x8A\x00\x02%#<modbus>";
+	out $1 "\x10\x01\x8A\x00\x02\x04\x00\x00\x00\x01%#<modbus>";
+	in $1 "\x10\x01\x8A\x00\x02%#<modbus>";
+}
+goto {
+	out $1 "\x10\x04\x00\x00\x02\x04%.4r%#<modbus>";
+	in $1 "\x10\x04\x00\x00\x02%#<modbus>";
+	out $1 "\x06\x00\x7D\x00\x08%#<modbus>";
+	in $1 "\x06\x00\x7D\x00\x08%#<modbus>";
+	out $1 "\x06\x00\x7D\x00\x00%#<modbus>";
+	in $1 "\x06\x00\x7D\x00\x00%#<modbus>";
+}
+alarmReset {
+	out $1 "\x10\x01\x80\x00\x02\x04\x00\x00\x00\x00%#<modbus>";
+	in $1 "\x10\x01\x80\x00\x02%#<modbus>";
+	out $1 "\x10\x01\x80\x00\x02\x04\x00\x00\x00\x01%#<modbus>";
+	in $1 "\x10\x01\x80\x00\x02%#<modbus>";
+}
+posAlarmReset {
+	out $1 "\x10\x01\x82\x00\x02\x04\x00\x00\x00\x00%#<modbus>";
+	in $1 "\x10\x01\x82\x00\x02%#<modbus>";
+	out $1 "\x10\x01\x82\x00\x02\x04\x00\x00\x00\x01%#<modbus>";
+	in $1 "\x10\x01\x82\x00\x02%#<modbus>";
+}
+alarmStatus {
+	out $1 "\x03\x00\x80\x00\x02%#<modbus>";
+	in $1 "\x03\x04%04r%#<modbus>";
+}
+warningStatus {
+	out $1 "\x03\x00\x96\x00\x02%#<modbus>";
+	in $1 "\x03\x04%04r%#<modbus>";
+}
+commErrStatus {
+	out $1 "\x03\x00\xAC\x00\x02%#<modbus>";
+	in $1 "\x03\x04%04r%#<modbus>";
+}
